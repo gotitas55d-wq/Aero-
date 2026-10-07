@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AERO ULTIMATE PRO by lukThing_</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050a12;color:#c8d8e8;font-family:monospace;transition:filter 0.3s ease;overflow-x:hidden}
+body.nvg-mode{filter:sepia(100%) hue-rotate(75deg) saturate(400%) contrast(120%);background:#021202}
+
+/* =========================================================
+   NUEVA PORTADA MODERNA, GLASSMORPHISM Y EFECTOS DE NEÃ“N
+   ========================================================= */
+#PORTADA{
+  position:fixed;
+  inset:0;
+  z-index:99999999;
+  background: radial-gradient(circle at center, #0a182e 0%, #02080f 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* Canvas animado de fondo (Grid / Radar) */
+#coverBgCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Tarjeta Principal con Efecto Cristal Glassmorphism */
+.portada-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(8, 22, 38, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(74, 242, 255, 0.4);
+  padding: 50px 40px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 0 50px rgba(74, 242, 255, 0.15), inset 0 0 20px rgba(74, 242, 255, 0.05);
+  animation: floatCard 4s ease-in-out infinite alternate;
+}
+
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-8px); }
+}
+
+/* TÃ­tulo Principal con Efecto NeÃ³n */
+.portada-title {
+  color: #ffffff;
+  font-size: 54px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  margin: 0;
+  text-shadow: 0 0 10px #4af2ff, 0 0 25px #4af2ff, 0 0 50px #4af2ff;
+  line-height: 1;
+}
+
+.portada-subtitle {
+  color: #4af2ff;
+  letter-spacing: 10px;
+  font-size: 12px;
+  margin-top: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.portada-badge {
+  display: inline-block;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #ffd700;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* BotÃ³n Entrar Animado */
+#btnEntrar {
+  width: 100%;
+  margin-top: 30px;
+  background: linear-gradient(135deg, #4af2ff 0%, #00bfff 100%);
+  color: #02080f;
+  border: 0;
+  padding: 18px 0;
+  font-weight: 900;
+  border-radius: 12px;
+  font-size: 18px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(74, 242, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#btnEntrar:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 40px rgba(74, 242, 255, 0.8);
+  background: linear-gradient(135deg, #ffffff 0%, #4af2ff 100%);
+}
+
+#btnEntrar:active {
+  transform: scale(0.98);
+}
+
+/* =========================================================
+   RESTO DE ESTILOS DE LA APLICACIÃ“N
+   ========================================================= */
+header{padding:8px;background:#0d1c2d;border-bottom:2px solid #4af2ff;position:sticky;top:0;z-index:50}
+.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px}
+.nav button{background:#000;color:#4af2ff;border:1px solid #4af2ff;padding:10px 2px;font-size:7px;font-weight:800;border-radius:8px;cursor:pointer}
+.nav button.on{background:#4af2ff;color:#000}.nav button.gold{background:#ffd700;color:#000;border:2px solid #ff8c00}.nav button.bloqueado{background:#112200;color:#22c55e;border-color:#22c55e;pointer-events:none}
+.pg{display:none;padding:12px}.pg.on{display:block}
+#r, #ilsCanvas, #worldCanvas{width:100%;height:350px;background:#000;border:2px solid #4af2ff;border-radius:12px;display:block}
+.card{border:1px solid #1a3a5a;background:#0f1f2f;padding:11px;margin:7px 0;border-radius:9px;font-size:11px;line-height:1.5}
+.pass{padding:12px;margin:10px 0;border-radius:8px;font-size:11px;line-height:1.6;border-left:5px solid}
+.btn{width:100%;padding:12px;font-weight:900;border-radius:9px;margin:7px 0;border:1px solid #4af2ff;background:#000;color:#4af2ff;cursor:pointer}
+.bA{background:#4af2ff;color:#000}.bG{background:#ffd700;color:#000}.bR{background:#ef4444;color:#fff}.bG2{background:#22c55e;color:#000}
+.lock{filter:grayscale(1);opacity:.5;pointer-events:none}
+input,select,textarea{width:100%;padding:12px;background:#000;color:#4af2ff;border:1px solid #4af2ff;border-radius:9px;margin:6px 0}
+#uvStage{position:relative;width:100%;height:220px;background:#111;border:2px solid #4af2ff;border-radius:12px;overflow:hidden;cursor:none}
+#uvPass{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:bold;color:#fff;user-select:none}
+#uvOverlay{position:absolute;inset:0;background:#000;pointer-events:none}
+table{width:100%;border-collapse:collapse;margin-top:8px;font-size:10px}
+th,td{border:1px solid #1a3a5a;padding:6px;text-align:left}
+th{background:#0a1a2a;color:#ffd700}
+</style>
+</head>
+<body>
+
+<!-- PORTADA RE DISEÃ‘ADA -->
+<div id="PORTADA">
+  <canvas id="coverBgCanvas"></canvas>
+  <div class="portada-card">
+    <h1 class="portada-title">AERO</h1>
+    <p class="portada-subtitle">SIMULATOR PRO</p>
+    <div>
+      <span class="portada-badge">DEV: lukThing_</span>
+    </div>
+    <button id="btnEntrar">â–¶ INICIAR SISTEMA</button>
+  </div>
+</div>
+
+<header>
+  <div style="text-align:center;color:#4af2ff;font-weight:900;font-size:10px">AERO <span style="color:#ffd700">by: lukThing_</span></div>
+  <div class="top" style="display:flex;justify-content:space-between;font-size:10px;color:#4af2ff;padding:4px">
+    <button id="btnNVG" style="background:#0a1a2a;color:#22c55e;border:1px solid #22c55e;padding:2px 8px;border-radius:4px;cursor:pointer;font-weight:bold">ðŸ”­ NVG: OFF</button>
+    <span id="btnSonido" style="cursor:pointer">ðŸ”Š ON</span>
+    <span id="estado">ðŸ”’</span>
+  </div>
+  <div class="nav">
+    <button id="b0" class="on">ðŸ“– GUÃA</button><button id="b1">ðŸŽ¯ RADAR</button><button id="b15">ðŸ—ºï¸ MAPA</button><button id="b2">ðŸ“¡ INTEL</button>
+    <button id="b3">ðŸ›‚ PASAP</button><button id="b4">ðŸ’± DIVISAS</button><button id="b5">ðŸŽ™ï¸ ATC</button><button id="b6">â€¢âˆ’ MORSE</button>
+    <button id="b7">âœ… CHECK</button><button id="b8">â›½ FUEL</button><button id="b9">ðŸš¨ 7700</button><button id="b12">ðŸ›¡ï¸ INSPECT</button>
+    <button id="b13">ðŸ›¬ ILS</button><button id="b14">ðŸ“‹ LOG</button><button id="b10" class="gold">ðŸ“ EXAMEN</button><button id="b11" class="gold">â­ CERT</button>
+  </div>
+</header>
+
+<div id="p0" class="pg on">
+  <h3 style="color:#ffd700;margin-bottom:8px">ðŸ“– GUÃA COMPLETA SYSTEM - by: lukThing_</h3>
+  <div class="card"><b>ðŸŽ¯ RADAR:</b> Pantalla 350px con barrido cyan. Aviones en tiempo real orbitando SKBO CTR. Sonido de barrido y detecciÃ³n.</div>
+  <div class="card"><b>ðŸ—ºï¸ MAPA MUNDI:</b> Monitoreo interactivo de rutas de aviaciÃ³n comercial global en tiempo real.</div>
+  <div class="card"><b>ðŸ›¡ï¸ INSPECTOR UV:</b> EscÃ¡ner tÃ¡ctico con linterna UV para inspeccionar pasaportes. Detecta marcas fluorescentes para aprobar o rechazar pasajeros.</div>
+  <div class="card"><b>ðŸ›¬ APROXIMACIÃ“N ILS:</b> SimulaciÃ³n de aterrizaje en pista 14L. Controla rumbo y altitud para alinear el aviÃ³n con las luces PAPI.</div>
+  <div class="card"><b>ðŸ“‹ FLIGHT LOG:</b> Sistema de registro de bitÃ¡cora para almacenar vuelos, transpondedores asignados y marcas de tiempo.</div>
+  <div class="card"><b>ðŸ›‚ PASAPORTES:</b> Manual completo ICAO Doc 9303 con cÃ³digo de colores por categorÃ­a de seguridad.</div>
+</div>
+
+<div id="p1" class="pg"><canvas id="r" width="360" height="350"></canvas><div style="display:flex;gap:5px;margin-top:8px"><button id="zi" class="btn bA" style="width:33%">+</button><button id="zo" class="btn bA" style="width:33%">-</button><button id="zr" class="btn bA" style="width:33%">âŸ²</button></div><button id="btnPito" class="btn bA">ðŸ”Š PITO: ON solo en radar</button></div>
+
+<div id="p15" class="pg">
+  <h3 style="color:#ffd700;margin-bottom:8px">ðŸ—ºï¸ TRÃFICO AÃ‰REO GLOBAL EN TIEMPO REAL</h3>
+  <canvas id="worldCanvas" width="360" height="250"></canvas>
+  <div class="card" style="text-align:center">RUTAS INTERCONTINENTALES ACTIVAS: BOG-MAD, JFK-LHR, HND-LAX</div>
+</div>
+
+<div id="p2" class="pg"><div id="ib"></div></div>
+
+<div id="p3" class="pg">
+  <h3 style="color:#4af2ff;margin-bottom:10px;text-align:center">ðŸ›‚ VERIFICACIÃ“N DE PASAPORTES (ESTÃNDAR ICAO 9303)</h3>
+  
+  <div class="pass" style="background:#1a0520;border-color:#d946ef;color:#fae8ff">
+    <h4 style="color:#f472b6;font-size:13px">1. LUZ ULTRAVIOLETA (UV 365nm)</h4>
+    <p>El papel oficial es Ã³pticamente muerto. Muestra <span style="color:#ff4444;font-weight:bold">fibras rojas</span> y <span style="color:#00ff88;font-weight:bold">escudos verdes</span> radiantes. El falso brilla totalmente azul.</p>
+  </div>
+  
+  <div class="pass" style="background:#022c22;border-color:#10b981;color:#ecfdf5">
+    <h4 style="color:#34d399;font-size:13px">2. MICROTEXTO (0.2mm)</h4>
+    <p>Texto continuo <code style="color:#ffd700">REPUBLICA DE COLOMBIA</code> nÃ­tido bajo lupa 10x. El falso es borroso por inyecciÃ³n de tinta.</p>
+  </div>
+  
+  <div class="pass" style="background:#1c1917;border-color:#f59e0b;color:#fef3c7">
+    <h4 style="color:#fbbf24;font-size:13px">3. HOLO KINEGRAM</h4>
+    <p>Efecto 3D dinÃ¡mico <span style="color:#22c55e">verde</span> y <span style="color:#ffd700">dorado</span> al cambiar el Ã¡ngulo de luz. El falso es un sticker plano.</p>
+  </div>
+  
+  <div class="pass" style="background:#082f49;border-color:#0ea5e9;color:#e0f2fe">
+    <h4 style="color:#38bdf8;font-size:13px">4. ZONA MRZ / ZMR</h4>
+    <p>LÃ­neas OCR-B con checksums de seguridad verificables. Errores matemÃ¡ticos indican falsificaciÃ³n.</p>
+  </div>
+  
+  <div class="pass" style="background:#312e81;border-color:#6366f1;color:#e0e7ff">
+    <h4 style="color:#818cf8;font-size:13px">5. CHIP NFC / RFID</h4>
+    <p>Almacena datos biomÃ©tricos cifrados mediante PKI internacional. Lectura con estÃ¡ndar BAC/EAC.</p>
+  </div>
+  
+  <div class="pass" style="background:#292524;border-color:#a8a29e;color:#f5f5f4">
+    <h4 style="color:#d6d3d1;font-size:13px">6. COSTURA Y AGUA</h4>
+    <p>Hilo tricolor cosido con marca de agua tritono integrada en las 32/48 pÃ¡ginas.</p>
+  </div>
+</div>
+
+<div id="p4" class="pg">
+  <h3>ðŸ’± CONVERTIDOR DE DIVISAS MONDIAL</h3>
+  <input id="u" type="number" value="100" placeholder="Monto en USD">
+  <button id="cb" class="btn bA">CONVERTIR</button>
+  <div id="dv" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
+</div>
+
+<div id="p5" class="pg">
+  <select id="af">
+    <option>AVA120 autorizado despegue pista 14L QNH 1015</option>
+    <option>AVA044 mantenga espera en punto de mantenciÃ³n 14L</option>
+    <option>AVA852 autorizado aproximaciÃ³n ILS pista 14L</option>
+  </select>
+  <button id="ap" class="btn bA">â–¶ TRANSMITIR MENSAJE ATC</button>
+  <button id="ptt" class="btn bR">ðŸŽ™ï¸ PTT: MANTENER PARA RADIAR ESTÃTICA</button>
+</div>
+
+<div id="p6" class="pg"><textarea id="mi" placeholder="BOGOTA 123"></textarea><button id="mb" class="btn bG">TRADUCIR</button><div id="mo" style="color:#ffd700;text-align:center;border:2px solid #ffd700;padding:15px;font-size:18px">â€¢â€¢â€¢ âˆ’âˆ’âˆ’ â€¢â€¢â€¢</div><button id="ms" class="btn">ðŸ”Š SONIDO MORSE</button></div>
+<div id="p7" class="pg"><div id="ck"></div></div>
+
+<div id="p8" class="pg">
+  <input id="di" type="number" value="1200"><button id="fb" class="btn bA">CALCULAR COMBUSTIBLE</button>
+  <div id="fo" class="card"></div>
+  <button id="me" class="btn bA">GENERAR CLIMA METAR EN VIVO</button>
+  <div id="meo" class="card"></div>
+</div>
+
+<div id="p9" class="pg">
+  <button id="s7" class="btn bR">ðŸš¨ SQUAWK 7700 (EMERGENCIA)</button>
+  <button id="s6" class="btn" style="background:#fa0;color:#000">7600 (FALLO RADIO)</button>
+  <button id="s1" class="btn bA">1200 (VFR GENERAL)</button>
+  <div id="sq" class="card" style="text-align:center;font-weight:bold;font-size:16px">1200</div>
+</div>
+
+<div id="p12" class="pg">
+  <h3 style="color:#ffd700;margin-bottom:8px">ðŸ›¡ï¸ INSPECTOR TÃCTICO UV</h3>
+  <p style="font-size:10px;margin-bottom:6px">Mueve el cursor/dedo sobre el pasaporte para activar la linterna UV. Detecta si contiene el escudo fluorescente.</p>
+  <div id="uvStage">
+    <div id="uvPass">
+      <span id="uvText">PASAPORTE #COL-88492</span>
+      <span id="uvSec" style="color:#00ff88;display:none;margin-top:10px;font-size:18px">ðŸ›¡ï¸ ESCUDO UV ORIGINAL ðŸ›¡ï¸</span>
+    </div>
+    <div id="uvOverlay"></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button id="btnPassAprov" class="btn bG2">âœ… APROBAR ENTRADA</button>
+    <button id="btnPassRech" class="btn bR">âŒ RECHAZAR FRAUDE</button>
+  </div>
+  <div id="uvResult" class="card" style="text-align:center">ESTADO: ESPERANDO INSPECCIÃ“N</div>
+</div>
+
+<div id="p13" class="pg">
+  <h3 style="color:#ffd700;margin-bottom:8px">ðŸ›¬ ATERRIZAJE ILS SKBO 14L</h3>
+  <canvas id="ilsCanvas" width="360" height="250"></canvas>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+    <button id="btnIlsLeft" class="btn bA">â—€ CORREGIR IZQ</button>
+    <button id="btnIlsRight" class="btn bA">CORREGIR DER â–¶</button>
+    <button id="btnIlsUp" class="btn bG">â–² SUBIR ALTITUD</button>
+    <button id="btnIlsDown" class="btn bG">â–¼ BAJAR ALTITUD</button>
+  </div>
+  <div id="ilsStatus" class="card" style="text-align:center">ESTADO: EN APROXIMACIÃ“N FINAL</div>
+</div>
+
+<div id="p14" class="pg">
+  <h3 style="color:#ffd700;margin-bottom:8px">ðŸ“‹ REGISTRO DE BITÃCORA (FLIGHT LOG)</h3>
+  <div style="display:flex;gap:4px">
+    <input id="logCall" placeholder="Vuelo (Ej: AVA120)">
+    <input id="logSq" placeholder="Squawk">
+  </div>
+  <button id="btnLogAdd" class="btn bG">REGISTRAR OPERACIÃ“N</button>
+  <table>
+    <thead><tr><th>HORA (UTC)</th><th>VUELO</th><th>SQUAWK</th><th>ESTADO</th></tr></thead>
+    <tbody id="logTable"></tbody>
+  </table>
+</div>
+
+<div id="p10" class="pg">
+  <h3 style="color:#ffd700">ðŸ“ EXAMEN DE EVALUACIÃ“N TÃ‰CNICA</h3>
+  <button id="btnResetExam" class="btn bR" style="padding:6px;margin:4px 0;font-size:10px">ðŸ”„ REINICIAR EXAMEN</button>
+  <div id="eq" class="card" style="border-color:#ffd700;font-weight:900"></div>
+  <div id="eo"></div>
+  <div id="er" class="card" style="text-align:center"></div>
+  <button id="en" class="btn bG" style="display:none">SIGUIENTE PREGUNTA</button>
+  <div id="bloqMsg" style="display:none" class="card" style="background:#003300;border-color:#22c55e;text-align:center">âœ… APROBADO - EVALUACIÃ“N COMPLETADA Y BLOQUEADA</div>
+</div>
+
+<div id="p11" class="pg" style="background:#0f0d00">
+  <h3 style="color:#ffd700;text-align:center">â­ CERTIFICADO Y ENVÃO POR CORREO</h3>
+  <div id="lk" class="card" style="background:#330000;border-color:#ef4444;text-align:center">ðŸ”’ Aprobar el examen para desbloquear</div>
+  <div id="cf" class="lock">
+    <input id="nm" placeholder="Nombre completo">
+    <input id="userEmail" type="email" placeholder="Tu correo electrÃ³nico (ej: usuario@correo.com)">
+    <select id="pa"><option>Colombia</option><option>EspaÃ±a</option><option>USA</option><option>MÃ©xico</option><option>Argentina</option><option>PanamÃ¡</option><option>Chile</option><option>PerÃº</option><option>Ecuador</option><option>Brasil</option></select>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <button id="gb" class="btn bG">ðŸ“œ GENERAR Y VER CERTIFICADO</button>
+      <button id="btnSendMail" class="btn bA">ðŸ“§ ENVIAR NOTIFICACIÃ“N POR MAIL</button>
+    </div>
+    
+    <canvas id="ct" width="900" height="650" style="display:none;border:3px solid #ffd700;width:100%;border-radius:12px;margin-top:10px"></canvas>
+    <button id="db" class="btn bG2" style="display:none">â¬‡ï¸ DESCARGAR CERTIFICADO EN IMAGEN (PNG)</button>
+    <div id="mailResult" class="card" style="display:none;text-align:center;border-color:#22c55e"></div>
+  </div>
+</div>
+
+<script>
+// ANIMACIÃ“N DE FONDO DE LA PORTADA
+(function initCoverCanvas(){
+  const canvas = document.getElementById('coverBgCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let angle = 0;
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    
+    // Grid sutil radar
+    ctx.strokeStyle = 'rgba(74, 242, 255, 0.08)';
+    ctx.lineWidth = 1;
+    let size = 40;
+    for(let x = 0; x < w; x += size){
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+    }
+    for(let y = 0; y < h; y += size){
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+    }
+
+    // CÃ­rculos concÃ©ntricos de radar central
+    let cx = w / 2, cy = h / 2;
+    for(let r = 50; r < Math.max(w, h); r += 120){
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(74, 242, 255, 0.05)';
+      ctx.stroke();
+    }
+
+    // Barrido rotativo
+    angle += 0.01;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    let grad = ctx.createRadialGradient(0,0,10, 0,0, Math.max(w,h)/1.5);
+    grad.addColorStop(0, 'rgba(74, 242, 255, 0.15)');
+    grad.addColorStop(1, 'rgba(74, 242, 255, 0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.arc(0,0, Math.max(w,h)/1.5, 0, Math.PI / 4);
+    ctx.fill();
+    ctx.restore();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+let $=id=>document.getElementById(id),Z=1,sOn=true,aCtx=null,ap=localStorage.getItem('aero_aprobado')=='true',radarSonido=true,enRadar=false,P=[{c:'AVA120'},{c:'AVA044'},{c:'AVA852'}];
+
+const T=[
+  ['COP (Colombia)',4100],['EUR (Euro)',0.92],['MXN (MÃ©xico)',17.2],['BRL (Brasil)',5.15],
+  ['PAB (PanamÃ¡)',1],['PEN (PerÃº)',3.75],['CLP (Chile)',920],['GBP (R. Unido)',0.79],
+  ['JPY (JapÃ³n)',155],['ARS (Argentina)',890],['USD (EE.UU.)',1],['CHF (Suiza)',0.91],
+  ['CAD (CanadÃ¡)',1.35],['AUD (Australia)',1.52],['CNY (China)',7.23],['HKD (Hong Kong)',7.81],
+  ['SGD (Singapur)',1.34],['KRW (Corea S.)',1360],['INR (India)',83.4],['AED (Emiratos)',3.67],
+  ['SEK (Suecia)',10.5],['NZD (N. Zelanda)',1.63],['ZAR (S. Ãfrica)',18.2],['NOK (Noruega)',10.8],['UYU (Uruguay)',38.9]
+];
+
+function SP(id){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));$(id).classList.add('on');enRadar=(id=='p1')}
+function SA(b){document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
+function ensureAudio(){if(!aCtx){aCtx=new(window.AudioContext||window.webkitAudioContext)}if(aCtx.state=='suspended')aCtx.resume();return aCtx}
+function beep(f,d){if(!sOn)return;if(f>=800&&f<=1300&&!enRadar)return;let ac=ensureAudio();try{let o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(0.25,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.01,ac.currentTime+d);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+
+let noiseNode = null;
+function playStatic(start){
+  let ac = ensureAudio();
+  if(start){
+    if(noiseNode) return;
+    let bufferSize = ac.sampleRate * 2,
+        buffer = ac.createBuffer(1, bufferSize, ac.sampleRate),
+        output = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
+    noiseNode = ac.createBufferSource();
+    noiseNode.buffer = buffer;
+    noiseNode.loop = true;
+    let gain = ac.createGain();
+    gain.gain.value = 0.08;
+    noiseNode.connect(gain);
+    gain.connect(ac.destination);
+    noiseNode.start();
+  } else {
+    if(noiseNode){ noiseNode.stop(); noiseNode.disconnect(); noiseNode = null; }
+  }
+}
+
+function upd(){
+  if(ap){
+    $
